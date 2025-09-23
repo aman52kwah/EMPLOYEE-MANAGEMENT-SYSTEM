@@ -5,7 +5,7 @@ import { Employee, Department } from "../types";
 interface EmployeeFormsProps {
   employee?: Employee | null;
   departments: Department[];
-  onSubmit: (employee: Employee | Omit<Employee, "id">) => void;
+  onSubmit: (employee: Employee | Omit<Employee, 'id'>) => void;
   onClose: () => void;
 }
 

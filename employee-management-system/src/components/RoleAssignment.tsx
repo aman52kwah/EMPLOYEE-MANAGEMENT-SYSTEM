@@ -30,7 +30,7 @@ const roles = {
       "approve_requests",
       "manage_schedules",
     ],
-    colors: "bg-blue-100 text-blue-800",
+    color: "bg-blue-100 text-blue-800",
     icon: Users,
   },
 
@@ -43,7 +43,7 @@ const roles = {
       "view_code",
       "deploy_applications",
     ],
-    colors: "bg-green-100 text-green-800",
+    color: "bg-green-100 text-green-800",
     icon: Settings,
   },
 
@@ -295,6 +295,36 @@ const RoleAssignment: React.FC<RoleAssignmentProps> = ({
                         )}
                       </div>
                     </td>
+                    <td className="px-6 py-6 whitespace-nowrap text-right text-sm font-medium">
+                      {isEditing ? (
+                        <div className="flex justify-end space-x-2">
+                          <button
+                            onClick={() =>
+                              handleRoleUpdate(employee.id, selectedRole)
+                            }
+                            className="text-green-600 hover:text-green-900 p-1"
+                            title="Save"
+                          >
+                            <Check className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={cancelEditing}
+                            className="text-gray-600 hover:text-gray-900 p-1"
+                            title="Cancel"
+                          >
+                            <X className="h-4 w0-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => startEditing(employee)}
+                          className="text-blue-600 hover:text-blue-900 p-1"
+                          title="Edit Role"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -305,3 +335,4 @@ const RoleAssignment: React.FC<RoleAssignmentProps> = ({
     </div>
   );
 };
+export default RoleAssignment;
