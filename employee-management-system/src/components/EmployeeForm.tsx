@@ -1,11 +1,11 @@
-import React, { useState, useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Save, User } from "lucide-react";
 import { Employee, Department } from "../types";
 
 interface EmployeeFormsProps {
   employee?: Employee | null;
   departments: Department[];
-  onSubmit: (employee: Employee | Omit<Employee, 'id'>) => void;
+  onSubmit: (employee: Employee | Omit<Employee, "id">) => void;
   onClose: () => void;
 }
 
@@ -24,7 +24,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
     position: "",
     salary: 0,
     hireDate: "",
-    status: "active" as const,
+    status: "active" as "active" | "inactive",
     role: "employee",
   });
 
@@ -110,7 +110,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
     //clear errors when user starts typing
 
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: " " }));
     }
   };
 
@@ -134,7 +134,10 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
               {employee ? "Edit Employee" : "Add New Employee"}
             </h2>
           </div>
-          <button className="text-gray-400 hover:text-gray-600 transition-colors">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -143,10 +146,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/*personal information */}
           <div>
-            <h3
-              className="text-lg font-medium text-gray-900 
-                        mb-4"
-            >
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
               Personal Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -160,7 +160,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
                   value={formData.firstName}
                   onChange={handleChange}
                   className={`w-full border rounded-lg px-3 py-2 focus:ring-2
-                            focus:ring-blue-500 focusLborder-blue-500 ${
+                            focus:ring-blue-500 focus:border-blue-500 ${
                               errors.firstName
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -185,7 +185,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
                   value={formData.lastName}
                   onChange={handleChange}
                   className={`w-full border rounded-lg px-3 py-2 focus:ring-2
-                            focus:ring-blue-500 focusLborder-blue-500 ${
+                            focus:ring-blue-500 focus:border-blue-500 ${
                               errors.lastName
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -208,7 +208,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
                   value={formData.email}
                   onChange={handleChange}
                   className={`w-full border rounded-lg px-3 py-2 focus:ring-2
-                            focus:ring-blue-500 focusLborder-blue-500 ${
+                            focus:ring-blue-500 focus:border-blue-500 ${
                               errors.email
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -231,7 +231,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
                   value={formData.phone}
                   onChange={handleChange}
                   className={`w-full border rounded-lg px-3 py-2 focus:ring-2
-                            focus:ring-blue-500 focusLborder-blue-500 ${
+                            focus:ring-blue-500 focus:border-blue-500 ${
                               errors.phone
                                 ? "border-red-500"
                                 : "border-gray-300"
@@ -253,7 +253,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-m font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Department *
                 </label>
                 <select
@@ -282,7 +282,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
               </div>
 
               <div>
-                <label className="block text-m font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Position *
                 </label>
                 <input
@@ -290,7 +290,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
                   name="position"
                   value={formData.position}
                   onChange={handleChange}
-                  className={`w-full border rounded-lg px-3 py-2 focus:ring-blue-500
+                  className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500
                                  focus:border-blue-500 ${
                                    errors.position
                                      ? "border-red-500"
@@ -305,7 +305,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
               </div>
 
               <div>
-                <label className="block text-m font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Annual Salary *
                 </label>
                 <input
@@ -330,7 +330,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
               </div>
 
               <div>
-                <label className="block text-m font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Hire Date *
                 </label>
                 <input
@@ -338,7 +338,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
                   name="hireDate"
                   value={formData.hireDate}
                   onChange={handleChange}
-                  className={`w-full border rounded-lg px-3 py-2 focus:ring-blue-500
+                  className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500
                                  focus:border-blue-500 ${
                                    errors.hireDate
                                      ? "border-red-500"
@@ -352,7 +352,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
               </div>
 
               <div>
-                <label className="block text-m font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Status
                 </label>
                 <select
@@ -368,7 +368,7 @@ const EmployeeForm: React.FC<EmployeeFormsProps> = ({
               </div>
 
               <div>
-                <label className="block text-m font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   Role
                 </label>
                 <select

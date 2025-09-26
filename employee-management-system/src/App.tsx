@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {Users, Building2,DollarSign,
-  Settings,Plus,Search,Filter,
-  ReceiptSwissFrancIcon} 
+  Settings,Plus,Search,Filter} 
   from 'lucide-react';
   import Dashboard from './components/Dashboard';
   import  EmployeeList  from "./components/EmployeeList";
