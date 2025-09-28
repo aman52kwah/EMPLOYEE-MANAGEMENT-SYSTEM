@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {Users, Building2,DollarSign,
-  Settings,Plus,Search,Filter} 
+  Settings,Plus,Search,Filter,LogOut} 
   from 'lucide-react';
   import Dashboard from './components/Dashboard';
   import  EmployeeList  from "./components/EmployeeList";
@@ -9,12 +9,14 @@ import {Users, Building2,DollarSign,
   import SalaryAdjustmentModal from './components/SalaryAdjustmentModal';
   import RoleAssignment from './components/RoleAssignment';
   import { Employee,Department } from './types';
-  import {mockEmployees, mockDepartments} from './data/mockData'
+  import {mockEmployees, mockDepartments} from './data/mockData';
+  import {AuthProvider,useAuth} from './contexts/AuthContext';
+  import AuthWrapper from './components/AuthWrapper'
 
 import './App.css';
 
-function App() {
-  
+const AppContent:React.FC =()=> {
+  const {user,logout} = useAuth();
 const [activeTab, setActiveTab] = useState('dashbaord');
 const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
 const [departments, setDepartments] = useState<Department[]>(mockDepartments);
@@ -37,7 +39,13 @@ id:Date.now().toString(),
   setShowEmployeeForm(false);
 };
 
-
+const handleEmployeeFormSubmit = (employee:Employee | Omit <Employee,'id'>)=>{
+  if('id' in employee){
+    handleEditEmployee(employee as Employee);
+  }else{
+    handleAddEmployee(employee as Omit<Employee,'id'>);
+  }
+};
 
 const handleEditEmployee=(employee:Employee)=>{
   setEmployees(employees.map(emp =>emp.id === employee.id ? employee : emp));
@@ -59,11 +67,19 @@ const handleSalaryAdjustment = (employeeId:string,newSalary:number,reason:string
   setSelectedEmployee(null);
 };
 
+const handleLogout= ()=>{
+  if (window.confirm('Are you sure you want to sign out?')) {
+    logout();
+  }
+}
+
 
 const renderCount =()=> {
   switch(activeTab){
     case 'dashboard':
-      return <Dashboard employees ={employees} departments={departments} />;
+      return <Dashboard employees={employees} departments={departments} onAdd={function (): void {
+        throw new Error('Function not implemented.');
+      } } />;
 
       case 'employees':
         return (
@@ -102,8 +118,10 @@ const renderCount =()=> {
           );
           default:
             return <Dashboard
-            employees={employees}
-            departments={departments}/>;
+              employees={employees}
+              departments={departments} onAdd={function (): void {
+                throw new Error('Function not implemented.');
+              } }/>;
 
   }
 };
@@ -141,6 +159,30 @@ const renderCount =()=> {
                   })}
               </div>
             </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3">
+                <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
+                  <span className="text-white font-medium text-sm">
+                    {user?.firstName[0]}{user?.lastName[0]}
+                  </span>
+                </div>
+                <div className="hidden sm:block">
+                  <p className="text-sm font-medium text-gray-900">
+                    {user?.firstName}{user?.lastName}
+                  </p>
+                  <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                </div>
+              </div>
+              <button
+              onClick={handleLogout}
+              className='flex items-center px-3 py-2 text-sm text-gray-600
+               hover:text-gray-900 hover:bg-gray-100 rounded-lg 
+               transition-colors'
+               title='Sign Out'>
+                <LogOut className='h-4 w-4 mr-2' />
+                <span className="hidden sm:inline">Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -157,7 +199,7 @@ const renderCount =()=> {
         <EmployeeForm
         employee={selectedEmployee}
         departments={departments}
-        onSubmit={selectedEmployee ? handleEditEmployee : handleAddEmployee}
+        onSubmit={handleEmployeeFormSubmit}
         onClose={()=>{
           setShowEmployeeForm(false);
           setSelectedEmployee(null)
@@ -172,10 +214,20 @@ const renderCount =()=> {
         onClose={()=>{
           setShowSalaryModal(false);
           setSelectedEmployee(null);
-        }}/>
+        }}
+        />
        )}
         </div>
     </div>
+  );
+};
+function App(){
+  return(
+    <AuthProvider>
+      <AuthWrapper>
+        <AppContent />
+      </AuthWrapper>
+    </AuthProvider>
   )
 }
 

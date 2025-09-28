@@ -5,9 +5,11 @@ import {Employee,Department} from '../types';
 interface DashboardProps{
     employees: Employee[];
     departments: Department[];
+    onAdd: () => void;
+    
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ employees, departments }) => {
+const Dashboard: React.FC<DashboardProps> = ({ employees, departments ,onAdd}) => {
   const totalEmployees = employees.length;
   const activeEmployees = employees.filter(
     (emp) => emp.status === "active"
@@ -163,6 +165,7 @@ const Dashboard: React.FC<DashboardProps> = ({ employees, departments }) => {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
+          onClick={onAdd}
             className="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 
                         hover:bg-blue-50 transition-colors"
           >

@@ -28,3 +28,18 @@ export interface Role {
   permissions: string[];
   description: string;
 }
+
+export interface User {
+  id: string;
+  email:string;
+  firstName:string,
+ lastName:string,
+  role:string;
+  avatar?:string;
+}
+
+export interface AuthState{
+  isAuthenticated:boolean;
+  user:User | null;
+  loading:boolean;
+}
